@@ -1,0 +1,12 @@
+{
+  "solid_valid": true,
+  "solids": 1,
+  "volume_mm3": 3812.734123147212,
+  "parameter_change_rebuilt": true,
+  "dimensions_design_mm": [
+    48.0,
+    24.0,
+    6.8
+  ],
+  "freecad_version": "1.1.4"
+}

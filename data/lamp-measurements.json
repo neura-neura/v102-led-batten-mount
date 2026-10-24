@@ -1,0 +1,61 @@
+{
+  "units": "mm",
+  "mass_g": 120,
+  "model_marking": "V-102",
+  "approximate_label_code": "PVCT8FSR-018CL-01",
+  "label_code_confirmed": false,
+  "label_voltage_V": 127,
+  "installation": "Under a shelf",
+  "axial_entry_possible": true,
+  "source": "Owner measurements and photograph; no manufacturer section drawing located",
+  "measurements": [
+    {
+      "id": "A",
+      "name": "Overall length",
+      "value": 1150,
+      "status": "Owner measured"
+    },
+    {
+      "id": "B",
+      "name": "Body width",
+      "value": 23.5,
+      "status": "Owner measured"
+    },
+    {
+      "id": "C",
+      "name": "Overall height",
+      "value": 14,
+      "status": "Owner measured"
+    },
+    {
+      "id": "D",
+      "name": "Groove opening",
+      "value": 1,
+      "status": "Approximate"
+    },
+    {
+      "id": "E",
+      "name": "Groove depth",
+      "value": 0.5,
+      "status": "Initially estimated at 0.5 mm or less; not verified"
+    },
+    {
+      "id": "F",
+      "name": "Back to nearest groove edge",
+      "value": 1,
+      "status": "Approximate"
+    },
+    {
+      "id": "G",
+      "name": "Lower lip thickness",
+      "value": 3,
+      "status": "Approximate"
+    },
+    {
+      "id": "H",
+      "name": "Usable groove length",
+      "value": 1114,
+      "status": "Owner measured"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+id,name,value,status
+A,Overall length,1150,Owner measured
+B,Body width,23.5,Owner measured
+C,Overall height,14,Owner measured
+D,Groove opening,1,Approximate
+E,Groove depth,0.5,Initially estimated at 0.5 mm or less; not verified
+F,Back to nearest groove edge,1,Approximate
+G,Lower lip thickness,3,Approximate
+H,Usable groove length,1114,Owner measured

@@ -1,0 +1,19 @@
+{
+  "units": "mm",
+  "revision": "r02",
+  "fit_status": "User-reported successful fit on one lamp; not independently tested",
+  "lamp_width": 23.5,
+  "inner_wall_spacing": 23.1,
+  "tongue_entry_per_side": 0.7,
+  "tongue_thickness": 0.6,
+  "tongue_lower_face_height": 6.2,
+  "wall_thickness": 2.4,
+  "base_thickness": 3.0,
+  "base_width": 48.0,
+  "clip_length": 24.0,
+  "screw_hole_diameter": 4.5,
+  "screw_center_spacing": 38.45,
+  "derived_tongue_projection": 0.5,
+  "derived_tip_to_tip_spacing": 22.1,
+  "derived_interference_per_side": 0.2
+}

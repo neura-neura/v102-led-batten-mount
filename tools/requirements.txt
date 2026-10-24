@@ -1,0 +1,6 @@
+# Optional: diagram generation and STL checks only.
+# The native FreeCAD project needs no pip packages.
+matplotlib>=3.8,<4
+numpy>=1.26,<3
+trimesh>=4.5,<6
+networkx>=3,<4

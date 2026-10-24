@@ -1,0 +1,15 @@
+parameter,value,unit
+lamp_width,23.5,mm
+inner_wall_spacing,23.1,mm
+tongue_entry_per_side,0.7,mm
+tongue_thickness,0.6,mm
+tongue_lower_face_height,6.2,mm
+wall_thickness,2.4,mm
+base_thickness,3.0,mm
+base_width,48.0,mm
+clip_length,24.0,mm
+screw_hole_diameter,4.5,mm
+screw_center_spacing,38.45,mm
+derived_tongue_projection,0.5,mm
+derived_tip_to_tip_spacing,22.1,mm
+derived_interference_per_side,0.2,mm

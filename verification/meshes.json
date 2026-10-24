@@ -1,0 +1,86 @@
+{
+  "units": "mm",
+  "stl_count": 6,
+  "meshes": [
+    {
+      "file": "stl/archive/v102-mount-r01-entry-0.2mm-loose-fit.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        6.800000190734863,
+        24.0
+      ],
+      "volume_mm3": 3812.802386055566,
+      "sha256": "e3f391bcc2124bb2c60ac942a6cd344bf41dc8163515b9dd974cd41dfc9cd002"
+    },
+    {
+      "file": "stl/archive/v102-mount-r01-entry-0.3mm-untested.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        6.800000190734863,
+        24.0
+      ],
+      "volume_mm3": 3815.682371407118,
+      "sha256": "808d2f182dcd1ce5d4ec40b9b901a77906d9dbdd7351efff0ea34c98be33a938"
+    },
+    {
+      "file": "stl/archive/v102-mount-r01-entry-0.4mm-untested.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        6.800000190734863,
+        24.0
+      ],
+      "volume_mm3": 3818.5623979574266,
+      "sha256": "25ed4ce09107ac65e7c626a53902cebf239a2122a1147643f0996b720adab545"
+    },
+    {
+      "file": "stl/experimental/axial-stop-untested.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        12.0,
+        12.0
+      ],
+      "volume_mm3": 2534.314439068311,
+      "sha256": "5af873eaaaf2714963bac52b58917c983ff6b8216cbadf35ad61146964397939"
+    },
+    {
+      "file": "stl/v102-mount-r02-confirmed-fit.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        6.800000190734866,
+        24.0
+      ],
+      "volume_mm3": 3812.7736227181063,
+      "sha256": "4add367706610622ef9507e042933da49631cce69a563dea5c98bfe7f7a38d67"
+    },
+    {
+      "file": "stl/v102-mount-r02-regenerated.stl",
+      "watertight": true,
+      "consistent_winding": true,
+      "connected_face_components": 1,
+      "bounds_size_mm": [
+        48.0,
+        6.800000190734866,
+        24.0
+      ],
+      "volume_mm3": 3812.7736227181063,
+      "sha256": "4add367706610622ef9507e042933da49631cce69a563dea5c98bfe7f7a38d67"
+    }
+  ],
+  "r02_export_volume_difference_percent": 0.0,
+  "note": "Digital topology/dimension checks only. Physical fit is owner-reported; no load or thermal validation."
+}

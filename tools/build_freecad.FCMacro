@@ -1,0 +1,83 @@
+from pathlib import Path
+import FreeCAD as App
+import Part, MeshPart
+from FreeCAD import Vector
+import json, math
+out=Path(__file__).resolve().parents[1]
+for folder in ['cad','stl','images','verification']:
+ (out/folder).mkdir(parents=True,exist_ok=True)
+doc=App.newDocument('V102_Mount_English')
+doc.Label='V-102 | revision 02 | confirmed fit'
+s=doc.addObject('Spreadsheet::Sheet','Dimensions');s.Label='DIMENSIONS - double-click to edit'
+s.set('A1','V-102 MOUNT / REVISION 02');s.mergeCells('A1:C1')
+s.set('A2','Edit green cells. All dimensions are in millimeters.');s.mergeCells('A2:C2')
+s.set('A3','Dimension');s.set('B3','mm');s.set('C3','What it changes')
+rows=[
+(4,'Lamp width (reference)',23.5,'LampWidth','Measured lamp width, not mount width.'),
+(5,'Inner wall spacing',23.1,'InnerSpacing','Smaller value = closer walls.'),
+(6,'Tongue entry per side',0.7,'Entry','Larger value = tips extend farther into grooves.'),
+(7,'Tongue thickness',0.6,'TongueThickness','Thickness inserted into the groove opening.'),
+(8,'Tongue lower-face height',6.2,'TongueHeight','Measured from the outside face of the base.'),
+(9,'Side wall thickness',2.4,'Wall','Thickness of each side wall.'),
+(10,'Base thickness',3.0,'Base','Thickness of the screw mounting plate.'),
+(11,'Overall base width',48.0,'BaseWidth','Outside edge to outside edge.'),
+(12,'Clip length',24.0,'Length','Length along the lamp axis.'),
+(13,'Screw hole diameter',4.5,'HoleDiameter','Unthreaded clearance hole.'),
+(14,'Screw center spacing',38.45,'HoleCenters','Distance between hole centers.')]
+for r,label,value,alias,note in rows:
+ s.set(f'A{r}',label);s.set(f'B{r}',str(value));s.setAlias(f'B{r}',alias);s.set(f'C{r}',note)
+ s.setBackground(f'B{r}',(0.80,0.94,0.82))
+s.set('A16','Tongue projection (calculated)');s.set('B16','=Entry+(InnerSpacing-LampWidth)/2');s.setAlias('B16','Projection')
+s.set('A17','Tip-to-tip spacing (calculated)');s.set('B17','=LampWidth-2*Entry')
+s.set('A18','Interference per side (calculated)');s.set('B18','=(LampWidth-InnerSpacing)/2')
+s.set('C18','Positive = nominal interference; actual fit may differ.')
+s.setBackground('B16:B18',(0.80,0.89,0.98))
+s.set('A20','User confirms this revision fits their lamp. Actual groove depth remains unmeasured.');s.mergeCells('A20:C20')
+s.set('A21','Fit report only: sustained-load and thermal performance have not been tested.');s.mergeCells('A21:C21')
+s.setColumnWidth('A',285);s.setColumnWidth('B',100);s.setColumnWidth('C',440)
+s.setStyle('A1:C1','bold','add');s.setStyle('A3:C3','bold','add')
+
+def box(name,label,expr):
+ o=doc.addObject('Part::Box',name);o.Label=label
+ for prop,e in expr.items():o.setExpression(prop,e)
+ return o
+base=box('Base','01 | Screw mounting base',{'Length':'Dimensions.BaseWidth','Width':'Dimensions.Length','Height':'Dimensions.Base','Placement.Base.x':'-Dimensions.BaseWidth/2'})
+pieces=[base]
+for side in [-1,1]:
+ wallx='Dimensions.InnerSpacing/2' if side==1 else '-Dimensions.InnerSpacing/2-Dimensions.Wall'
+ tonguex='Dimensions.LampWidth/2-Dimensions.Entry' if side==1 else '-Dimensions.InnerSpacing/2-Dimensions.Wall'
+ name='Right' if side==1 else 'Left'
+ pieces.append(box('Wall'+name,'02 | Side wall '+name.lower(),{'Length':'Dimensions.Wall','Width':'Dimensions.Length','Height':'Dimensions.TongueHeight+Dimensions.TongueThickness-Dimensions.Base','Placement.Base.x':wallx,'Placement.Base.z':'Dimensions.Base'}))
+ pieces.append(box('Tongue'+name,'03 | Tongue '+name.lower(),{'Length':'Dimensions.Wall+Dimensions.Projection','Width':'Dimensions.Length','Height':'Dimensions.TongueThickness','Placement.Base.x':tonguex,'Placement.Base.z':'Dimensions.TongueHeight'}))
+fuse=doc.addObject('Part::MultiFuse','Profile');fuse.Label='04 | Joined profile';fuse.Shapes=pieces;fuse.Refine=True
+holes=[]
+for side in [-1,1]:
+ o=doc.addObject('Part::Cylinder','LeftHole' if side<0 else 'RightHole')
+ o.Label='05 | Screw hole'
+ o.setExpression('Radius','Dimensions.HoleDiameter/2');o.setExpression('Height','Dimensions.Base+2')
+ o.setExpression('Placement.Base.x',('' if side>0 else '-')+'Dimensions.HoleCenters/2')
+ o.setExpression('Placement.Base.y','Dimensions.Length/2');o.Placement.Base.z=-1
+ holes.append(o)
+cutters=doc.addObject('Part::MultiFuse','HoleTools');cutters.Shapes=holes
+final=doc.addObject('Part::Cut','Mount');final.Label='FINAL MOUNT - select to export';final.Base=fuse;final.Tool=cutters;final.Refine=True
+doc.recompute()
+for obj in pieces+[fuse,cutters]+holes:obj.Visibility=False
+final.Visibility=True;final.ViewObject.ShapeColor=(0.23,0.64,0.83);final.ViewObject.LineColor=(0.08,0.16,0.21)
+assert final.Shape.isValid() and len(final.Shape.Solids)==1
+# Check parameter-driven rebuilding, then restore revision 02.
+v0=final.Shape.Volume
+s.set('B6','0.6');doc.recompute();v1=final.Shape.Volume
+assert final.Shape.isValid() and abs(v1-v0)>0.01
+s.set('B6','0.7');doc.recompute();assert abs(final.Shape.Volume-v0)<0.001
+Gui.activeDocument().activeView().viewAxonometric();Gui.activeDocument().activeView().fitAll()
+Gui.Selection.clearSelection()
+doc.recompute();doc.saveAs(str(out/'cad/v102-mount.FCStd'))
+# Rotate only the exported shape to match the previously tested STL print orientation.
+shape=final.Shape.copy();shape.rotate(Vector(0,0,0),Vector(1,0,0),90)
+mesh=MeshPart.meshFromShape(Shape=shape,LinearDeflection=0.025,AngularDeflection=0.10,Relative=False)
+mesh.write(str(out/'stl/v102-mount-r02-regenerated.stl'))
+final.Shape.exportStep(str(out/'cad/v102-mount.step'))
+Gui.activeDocument().activeView().saveImage(str(out/'images/mount-isometric.png'),1400,950,'White')
+info={'solid_valid':final.Shape.isValid(),'solids':len(final.Shape.Solids),'volume_mm3':final.Shape.Volume,'parameter_change_rebuilt':True,'dimensions_design_mm':[final.Shape.BoundBox.XLength,final.Shape.BoundBox.YLength,final.Shape.BoundBox.ZLength],'freecad_version':'.'.join(App.Version()[:3])}
+(out/'verification/freecad-solid.json').write_text(json.dumps(info,indent=2))
+print(json.dumps(info))
